@@ -1,4 +1,4 @@
-package com.example.javapp_311_2;
+package com.example.javapp_311_2.util;
 
 import com.example.javapp_311_2.model.User;
 import com.example.javapp_311_2.repo.UserRepository;
@@ -10,8 +10,11 @@ import javax.annotation.PostConstruct;
 @Component
 public class DBInit {
 
-    @Autowired
-    private UserRepository userService;
+    private final UserRepository userService;
+
+    public DBInit(UserRepository userService) {
+        this.userService = userService;
+    }
 
     @PostConstruct
     public void createNewUsersOnStart() {

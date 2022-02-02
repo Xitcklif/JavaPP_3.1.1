@@ -1,8 +1,7 @@
 package com.example.javapp_311_2.controller;
 
 import com.example.javapp_311_2.model.User;
-import com.example.javapp_311_2.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.javapp_311_2.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/{id}")
     public String showUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userService.findById(id));
         return "users/userPage";
     }
 
@@ -28,13 +26,13 @@ public class UserController {
     public String updateUser(@PathVariable("id") long id,
                              @ModelAttribute("user") User user) {
 
-        userRepository.save(user);
-        return "redirect:/user/" + id;
+        userService.save(user);
+        return "redirect:/";
     }
 
     @PostMapping("/remove/{id}")
     public String deleteUser(@PathVariable("id") long id) {
-        userRepository.delete(userRepository.findById(id).get());
+        userService.deleteById(id);
         return "redirect:/";
     }
 }

@@ -1,30 +1,25 @@
 package com.example.javapp_311_2.controller;
 
 import com.example.javapp_311_2.model.User;
-import com.example.javapp_311_2.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.javapp_311_2.service.UserService;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/")
 public class AdminController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Autowired
-    public AdminController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AdminController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping()
     public String openUserPage(Model model) {
-        Iterable<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.findAll());
         return "users/usersPage";
     }
 
@@ -36,7 +31,7 @@ public class AdminController {
 
     @PostMapping()
     public String newUser(@ModelAttribute("user") User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/";
     }
 }
